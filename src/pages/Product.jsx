@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect , useState } from 'react'
+import { useLocation } from 'react-router-dom' 
 import styled from "styled-components"
 import { Remove , Add } from '@material-ui/icons'
 import Navbar from '../components/Navbar'
@@ -7,6 +8,9 @@ import Products from '../components/Product/Products'
 import NewsLetter from '../components/NewsLetter'
 import Footer from '../components/Footer'
 import {mobile} from '../responsive'
+import { useDispatch } from 'react-redux'
+import { publicRequest } from '../api/requestMethod'
+import { addProduct } from '../redux/cartRedux'
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -128,20 +132,52 @@ const Button = styled.button`
 `
 
 const Product = () => {
+   const location = useLocation();
+   const id = location.pathname.split("/")[2];
+   const [product , setProduct] = useState({})
+   const [quantity , setQuantity] = useState(1)
+   const dispatch = useDispatch()
+   
+   useEffect(() => {
+      const getSingleProduct = async () => {
+         try{
+            const res = await publicRequest.get(`products/${id}`)
+            if(res.status){
+               setProduct(res.data)
+            }
+         }catch {}
+      }
+      getSingleProduct();
+   } , [id])
+
+   const handleAddToCart = () => {
+      dispatch (
+         addProduct({...product , quantity })
+      )
+   }
+
+   const handleQuantity = (type) => {
+      if(type === 'dec'){
+         quantity > 1 && setQuantity(quantity - 1)
+      }else{
+         setQuantity(quantity + 1)
+      }
+   }
+
    return (
-     <Container>
+      <Container>
          <Navbar/>
          <Announcement/>
          <Wrapper>
             <ImgContainer>
-               <Image src="https://cdn.pixabay.com/photo/2016/06/11/12/13/pink-hair-1450045_960_720.jpg"/> 
+               <Image src={product.image}/> 
             </ImgContainer>
             <InfoContainer>
-               <Title>Oluwafemi Makanju</Title>
+               <Title>{ product.title }</Title>
                <Desc>
-                  Hello , Here is Makanju Oluwafemi Emmanuel , I'm building a builder of builds .Software is always about what you are imagine. I'm happy to be here is just they marketing the hello world. 
+                   { product.description } 
                </Desc>
-               <Price>$ 20</Price>
+               <Price>$ {product.price }</Price>
                <FilterContainer>
                   <Filter>
                      <FilterTitle>Color</FilterTitle>
@@ -163,18 +199,18 @@ const Product = () => {
                </FilterContainer>
                <AddContainer>
                   <AmountContainer>
-                     <Remove/>
-                     <Amount>1</Amount>
-                     <Add/>
+                     <Remove onClick={() => handleQuantity('dec')}/>
+                     <Amount>{quantity}</Amount>
+                     <Add onClick={() => handleQuantity('inc')}/>
                   </AmountContainer>
-                  <Button>ADD TO CART</Button>
+                  <Button onClick={() => handleAddToCart()}>ADD TO CART</Button>
                </AddContainer>
             </InfoContainer>
          </Wrapper>
          <Products />
          <NewsLetter />
          <Footer />
-     </Container>
+      </Container>
    )
 }  
 

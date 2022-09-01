@@ -27,16 +27,19 @@ export const categories = [
       id: 1,
       img: "https://cdn.pixabay.com/photo/2014/02/03/16/52/bowl-257493_960_720.png",
       title:"SHIRT",
+      cat:''
    },
    {
       id: 2,
       img: "https://cdn.pixabay.com/photo/2018/09/12/12/37/cloth-3672088_960_720.jpg",
       title:"LOUNGEWEAR LOVE",
+      cat:'wears'
    },
    {
       id: 3,
       img: "https://cdn.pixabay.com/photo/2016/11/19/08/00/towel-1838210_960_720.jpg",
       title:"LIGHT JACKETS",
+      cat:'jackets'
    }
 ]
 

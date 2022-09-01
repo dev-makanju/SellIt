@@ -5,14 +5,14 @@ import Footer from '../components/Footer'
 import styled from 'styled-components'
 import { Add , Remove } from '@material-ui/icons'
 import { mobile } from '../responsive'
-
+import { useSelector } from 'react-redux'
 const Container = styled.div``
+
 const Wrapper = styled.div`
    padding: 20px;
    ${mobile({
       padding: '10px'
    })}
-
 `
 const Title = styled.div``
 
@@ -53,11 +53,11 @@ const Info = styled.div`
 `
 
 const Summary = styled.div`
-  flex: 1;
-  border: 0.5px solid lightgray;
-  border-radius: 10px;
-  padding: 10px;
-  height: 50vh;
+   flex: 1;
+   border: 0.5px solid lightgray;
+   border-radius: 10px;
+   padding: 10px;
+   height: 50vh;
 `
 
 const Hr = styled.hr`
@@ -155,6 +155,8 @@ const SummaryButton = styled.button`
 
 
 const Cart = () => {
+   const cart = useSelector( state => state.cart)
+   console.log(cart)
    return (
      <Container>
         <Navbar/>
@@ -171,45 +173,28 @@ const Cart = () => {
             </Top>
             <Bottom>
                <Info>
-                  <Product>
-                     <ProductDetail>
-                        <Image src="https://cdn.pixabay.com/photo/2018/01/13/19/39/fashion-3080644__340.jpg"/>
-                        <Details>
-                           <ProductName><b>Product:</b> JESSIE THUNDER SHOES</ProductName>
-                           <ProductId><b>ID:</b> 12njh46hdygt</ProductId>
-                           <ProductColor color="black"/>
-                           <ProductSize><b>Size:</b> 37.8</ProductSize>
-                        </Details>
-                     </ProductDetail>
-                     <PriceDetail>
-                        <ProductAmountContainer>
-                           <Add/>
-                           <ProductAmount>2</ProductAmount>
-                           <Remove/>
-                        </ProductAmountContainer>
-                        <ProductPrice>$ 30</ProductPrice>
-                     </PriceDetail>
-                  </Product>
+                  {cart.products.map( product => (   
+                     <Product>
+                        <ProductDetail>
+                           <Image src={product.image}/>
+                           <Details>
+                              <ProductName><b>Product:</b> { product.title } </ProductName>
+                              <ProductId><b>ID:</b> { product.id }</ProductId>
+                              <ProductColor color="black"/>
+                              <ProductSize><b>Size:</b> 37.8</ProductSize>
+                           </Details>
+                        </ProductDetail>
+                        <PriceDetail>
+                           <ProductAmountContainer>
+                              <Add/>
+                              <ProductAmount>{product.quantity}</ProductAmount>
+                              <Remove/>
+                           </ProductAmountContainer>
+                           <ProductPrice>$ {product.price}</ProductPrice>
+                        </PriceDetail>
+                     </Product>
+                  ))}
                   <Hr/>
-                  <Product>
-                     <ProductDetail>
-                        <Image src="https://cdn.pixabay.com/photo/2018/01/13/19/39/fashion-3080644__340.jpg"/>
-                        <Details>
-                           <ProductName><b>Product:</b> JESSIE THUNDER SHOES</ProductName>
-                           <ProductId><b>ID:</b> 12njh46hdygt</ProductId>
-                           <ProductColor color="black"/>
-                           <ProductSize><b>Size:</b> 37.8</ProductSize>
-                        </Details>
-                     </ProductDetail>
-                     <PriceDetail>
-                        <ProductAmountContainer>
-                           <Add/>
-                           <ProductAmount>2</ProductAmount>
-                           <Remove/>
-                        </ProductAmountContainer>
-                        <ProductPrice>$ 30</ProductPrice>
-                     </PriceDetail>
-                  </Product>
                </Info>
                <Summary>
                   <SummaryTitle>ORDER SUMMARY</SummaryTitle>
@@ -227,7 +212,7 @@ const Cart = () => {
                   </SummaryItem>
                   <SummaryItem type="total">
                      <SummaryItemText>Total</SummaryItemText>
-                     <SummaryItemPrice>$ 80</SummaryItemPrice>
+                     <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
                   </SummaryItem>
                   <SummaryButton>CHECKOUT NOW</SummaryButton>
                </Summary>

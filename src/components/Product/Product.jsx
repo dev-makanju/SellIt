@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ShoppingCartOutlined , SearchOutlined , FavoriteBorderOutlined } from '@material-ui/icons'
 
@@ -60,23 +61,24 @@ const Icon  = styled.div`
 `
 
 const Image = styled.img`  
-   height: 100%;
+   height: 300px;
    width: 100%;
-   z-index: 2;
-   object-fit: cover;
+   z-index: 2;  
 `
 
 function Product({product}) {
    return (
       <Container>
          <Circle/>
-         <Image src={product.img}/>
+         <Image src={product.image}/>
          <Info>
             <Icon>
                <ShoppingCartOutlined/>
             </Icon> 
             <Icon>
-               <SearchOutlined/>
+               <Link to={`/product/${product.id}`}>
+                  <SearchOutlined/>
+               </Link>
             </Icon>
             <Icon>
                <FavoriteBorderOutlined/>
